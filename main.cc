@@ -21,7 +21,7 @@
 #include <random>
 #include <set>
 #include <vector>
-
+#include <iostream>
 // From AFL
 #include "config.h"
 
@@ -367,7 +367,8 @@ int main(int argc, char *argv[])
 			//
 			// exec() the compiler. You need to substitute the path to your own compiler here.
             //printf("execution\n");
-			if (execlp("/home/haoxin/corpus-compilers/gcc-trunk/gcc-master/build/bin/g++", "g++", "-x", "c++", "-std=c++14", "-O3", "-c", "-", NULL) == -1)
+			if (execlp("/home/haoxin/corpus-compilers/gcc-trunk/gcc-master/build/bin/g++", "g++", "-x", "c++", "-std=c++14","-c", "-O3", "-", NULL) == -1)
+			//if (execlp("ls", NULL) == -1)
 			//if (execlp("/home/haoxin/corpus-compilers/gcc-trunk/gcc-master/build/gcc/xgcc", "xgcc", "-x", "c++", "-std=c++14", "-O3", "-c", "-", NULL) == -1)
 			//if (execlp("/home/vegard/personal/programming/gcc/build/gcc/xgcc", "xgcc", "-x", "c++", "-std=c++14", "-O3", "-Wall", "-fpermissive", "-g", "-pg", "-fwhole-program", "-ftree-pre", "-fstack-protector-all", "-fsanitize=undefined", "-fsanitize=address", "-fsanitize=leak", "-c", "-", NULL) == -1)
 			//if (execlp("/home/vegard/personal/programming/gcc/build/gcc/xgcc", "xgcc", "-x", "c++", "-std=c++14", "-O3", "-Wall", "-fpermissive", "-g", "-pg", "-fwhole-program", "-ftree-pre", "-fstack-protector-all", "-fsanitize=undefined", "-fsanitize=address", "-fsanitize=leak", "-S", "-", NULL) == -1)
@@ -480,8 +481,8 @@ int main(int argc, char *argv[])
 			testcase new_testcase(root, current.generation + 1, mutations, current.mutation_counter + ++mutation_counters[mutation], current.new_bits + new_bits);
 
 			printf("\e[31mcompiled (%u/%u | score %.2f | %u | %u): \e[0m", nr_execs, nr_execs_without_new_bits, new_testcase.score, pq.size(), new_bits);
-			root->print(stdout);
-            //printf("root : %s", root);
+            root->print(stdout);
+            //std::cout << str << std::cout;
 			printf("\n");
 
 			pq.push(new_testcase);
