@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
 			// TODO: clean up, take from command line
 			//
 			// exec() the compiler. You need to substitute the path to your own compiler here.
-            //printf("execution\n");
+            printf("execution\n");
 			if (execlp("/home/haoxin/corpus-compilers/gcc-trunk/gcc-master/build/bin/g++", "g++", "-x", "c++", "-std=c++14","-c", "-O3", "-", NULL) == -1)
 			//if (execlp("ls", NULL) == -1)
 			//if (execlp("/home/haoxin/corpus-compilers/gcc-trunk/gcc-master/build/gcc/xgcc", "xgcc", "-x", "c++", "-std=c++14", "-O3", "-c", "-", NULL) == -1)
@@ -434,10 +434,12 @@ int main(int argc, char *argv[])
 
 			if (len > 0) {
 				buffer[len - 1] = '\0';
+                //printf("buffer %s\n", buffer);
 
 				// Check for ICEs, but ignore a set of specific ones which we've
 				// already reported and which keep showing up.
-				if (strstr(buffer, "internal compiler error") && !strstr(buffer, "types may not be defined in parameter types") && !strstr(buffer, "internal compiler error: in synthesize_implicit_template_parm") && !strstr(buffer, "internal compiler error: in search_anon_aggr") && !strstr(buffer, "non_type_check") && !strstr(buffer, "internal compiler error: in xref_basetypes, at") && !strstr(buffer, "internal compiler error: in build_capture_proxy") && !strstr(buffer, "internal compiler error: tree check: expected record_type or union_type or qual_union_type, have array_type in reduced_constant_expression_p") && !strstr(buffer, "internal compiler error: in cp_lexer_new_from_tokens") && !strstr(buffer, "internal compiler error: in extract_constrain_insn") && !strstr(buffer, "in lra_eliminate_reg_if_possible") && !strstr(buffer, "Max. number of generated reload insns per insn is achieved") && !strstr(buffer, "standard_conversion") && !strstr(buffer, "in pop_local_binding") && !strstr(buffer, "of kind implicit_conv_expr") && !strstr(buffer, "in cp_build_addr_expr_1") && !strstr(buffer, "in poplevel_class, at") && !strstr(buffer, "force_constant_size")) {
+				//if (strstr(buffer, "internal compiler error") && !strstr(buffer, "types may not be defined in parameter types") && !strstr(buffer, "internal compiler error: in synthesize_implicit_template_parm") && !strstr(buffer, "internal compiler error: in search_anon_aggr") && !strstr(buffer, "non_type_check") && !strstr(buffer, "internal compiler error: in xref_basetypes, at") && !strstr(buffer, "internal compiler error: in build_capture_proxy") && !strstr(buffer, "internal compiler error: tree check: expected record_type or union_type or qual_union_type, have array_type in reduced_constant_expression_p") && !strstr(buffer, "internal compiler error: in cp_lexer_new_from_tokens") && !strstr(buffer, "internal compiler error: in extract_constrain_insn") && !strstr(buffer, "in lra_eliminate_reg_if_possible") && !strstr(buffer, "Max. number of generated reload insns per insn is achieved") && !strstr(buffer, "standard_conversion") && !strstr(buffer, "in pop_local_binding") && !strstr(buffer, "of kind implicit_conv_expr") && !strstr(buffer, "in cp_build_addr_expr_1") && !strstr(buffer, "in poplevel_class, at") && !strstr(buffer, "force_constant_size")) {
+				if (strstr(buffer, "internal compiler error")){ //&& !strstr(buffer, "types may not be defined in parameter types") && !strstr(buffer, "internal compiler error: in synthesize_implicit_template_parm") && !strstr(buffer, "internal compiler error: in search_anon_aggr") && !strstr(buffer, "non_type_check") && !strstr(buffer, "internal compiler error: in xref_basetypes, at") && !strstr(buffer, "internal compiler error: in build_capture_proxy") && !strstr(buffer, "internal compiler error: tree check: expected record_type or union_type or qual_union_type, have array_type in reduced_constant_expression_p") && !strstr(buffer, "internal compiler error: in cp_lexer_new_from_tokens") && !strstr(buffer, "internal compiler error: in extract_constrain_insn") && !strstr(buffer, "in lra_eliminate_reg_if_possible") && !strstr(buffer, "Max. number of generated reload insns per insn is achieved") && !strstr(buffer, "standard_conversion") && !strstr(buffer, "in pop_local_binding") && !strstr(buffer, "of kind implicit_conv_expr") && !strstr(buffer, "in cp_build_addr_expr_1") && !strstr(buffer, "in poplevel_class, at") && !strstr(buffer, "force_constant_size")) {
 					printf("ICE:\n");
 					root->print(stdout);
 					printf("\n");
@@ -460,7 +462,7 @@ int main(int argc, char *argv[])
 		}
 
 		int success = WIFEXITED(status) && WEXITSTATUS(status) == 0;
-        //printf("sucess = %d\n", success);
+        printf("sucess = %d\n", success);
 		if (success) {
 			// Found new bits in AFL instrumentation?
 			unsigned int new_bits = 0;
@@ -481,12 +483,16 @@ int main(int argc, char *argv[])
 			testcase new_testcase(root, current.generation + 1, mutations, current.mutation_counter + ++mutation_counters[mutation], current.new_bits + new_bits);
 
 			printf("\e[31mcompiled (%u/%u | score %.2f | %u | %u): \e[0m", nr_execs, nr_execs_without_new_bits, new_testcase.score, pq.size(), new_bits);
+            //FILE *ffp = fopen("test.cc", "w");
+            //root->print(ffp);
             root->print(stdout);
-            //std::cout << str << std::cout;
+            //std::cout << stdout << 'n';
 			printf("\n");
-
-			pq.push(new_testcase);
-            //printf("%s", new_testcase);
+            //char string[1000];
+            //freopen("/dev/null", "a", stdout);
+            //setbuf(stdout, string);
+			//pq.push(new_testcase);
+            //printf("%s", string);
 		}
 
 		remove_shm();
